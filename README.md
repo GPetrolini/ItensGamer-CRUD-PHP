@@ -1,104 +1,155 @@
-CRUD de Estoque Gamer em PHP
-Um sistema para gerenciar um estoque de itens gamer, construído com PHP 7.2 e seguindo padrões de arquitetura modernos. Este projeto serve como um diário de bordo do processo de desenvolvimento e aprendizado.
+# CRUD de Itens Gamer em PHP
 
-Fase 1: A Entidade de Dados (ItemGamerEntity)
-Objetivo da Fase
-O objetivo desta primeira fase foi construir a fundação do nosso sistema. Criamos a classe ItemGamerEntity, que serve como um "molde" para representar os dados de um item de estoque em nosso código PHP, garantindo que a aplicação manipule os dados de forma segura e estruturada.
+Este projeto é um sistema CRUD (Create, Read, Update, Delete) completo para gerenciar um catálogo de itens gamer, desenvolvido em PHP.
 
-Arquivos Criados
-app/Entities/ItensGamer/ItemGamerEntity.php
+O sistema foi criado como uma tarefa de integração e aprendizado durante minhas primeiras semanas em um novo ambiente profissional. O objetivo principal foi me familiarizar com a base de código da empresa, o fluxo de trabalho e, principalmente, servir como minha primeira imersão prática na linguagem PHP, que eu não conhecia previamente.
 
-Conceitos Abordados
-Entidade: Uma classe simples cuja única responsabilidade é carregar e transportar dados.
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+![PHPStorm](https://img.shields.io/badge/PHPStorm-000000?style=for-the-badge&logo=phpstorm&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
-Encapsulamento: Uso de propriedades private para proteger os dados.
+---
 
-Getters e Setters: Métodos públicos para uma interface controlada.
+## 📜 Sobre o Projeto
 
-Tipagem no PHP 7.2: Uso de PHPDoc (@var tipo|null) para documentar os tipos.
+A aplicação permite que um usuário realize as quatro operações básicas de gerenciamento de dados em um banco de dados MySQL, simulando uma pequena parte de um e-commerce ou catálogo de produtos. Todo o desenvolvimento foi focado em aplicar conceitos fundamentais de PHP em um cenário prático e real.
 
-Interface Fluente: Retornar $this (: self) nos setters para encadear chamadas.
+## ✨ Funcionalidades
 
-Padrões de Nomenclatura: camelCase e o prefixo is para booleanos.
+-   **Listar Itens:** Visualização de todos os itens cadastrados.
+-   **Adicionar Novos Itens:** Formulário para inserção de novos produtos.
+-   **Editar Itens:** Modificação das informações de um item existente.
+-   **Excluir Itens:** Remoção de um item do banco de dados.
 
-Método toArray(): Para converter o objeto em um array associativo.
+---
 
-Fim da Fase 1
+## 🚀 Diário de Bordo: Fases do Desenvolvimento e Aprendizados
 
-Fase 2: O Formulário de Cadastro (FormularioItemGamer)
-Objetivo da Fase
-Nesta fase, construímos a classe responsável por gerar a interface de usuário para inserir e editar dados. Em vez de escrever HTML diretamente, seguimos um padrão de abstração de formulário, onde cada campo (texto, select, checkbox) é um objeto PHP reutilizável.
+Este projeto foi construído em etapas. Cada fase representa um novo conjunto de conceitos aprendidos e aplicados. Abaixo está o registro detalhado dessa jornada.
 
-Arquivos Criados
-app/AcaoDePagina/Sys/ItensGamer/FormularioItemGamer.php
+<details>
+<summary><strong>▶️ Fase 0: Configuração e Versionamento Inicial</strong></summary>
 
-Conceitos Abordados
-Abstração de Formulário: Uso de classes (ex: CampoTextoUmaLinha, CampoSelect) para representar campos.
+### Objetivo da Fase
+Preparar o ambiente de desenvolvimento para o controle de versão com Git e GitHub. Esta fase foi crucial para garantir que todo o progresso do projeto fosse devidamente registrado e pudesse ser compartilhado.
 
-Herança: Nossa classe de formulário herda (extends) de uma classe base Formulario.
+### Ferramentas e Comandos
+-   **Git:** `git init`, `git config`, `git add .`, `git commit`
+-   **GitHub:** Criação de um repositório remoto.
+-   **Conexão Local/Remoto:** `git remote add origin`, `git push -u origin main`
 
-Lógica Condicional: Uso de if ($id > 0) para diferenciar a lógica de "edição" da de "inserção".
+### Conceitos Abordados
+-   **Inicialização de um repositório Git local** em um projeto já existente.
+-   **Configuração de identidade do autor** (user.name e user.email) no Git.
+-   **Processo de Staging, Commit e Push:** O fluxo fundamental para salvar e enviar alterações para o GitHub.
+-   **Conexão entre o repositório local e o remoto** no GitHub.
 
-Configuração Fluente: Uso de métodos como ->required() e ->setOpcoes([...]).
+</details>
 
-Select Simples vs. Múltiplo: Entendemos as diferenças, como o [] no nome do campo.
+<details>
+<summary><strong>▶️ Fase 1: A Entidade de Dados (ItemGamerEntity)</strong></summary>
 
-Fim da Fase 2
+### Objetivo da Fase
+Construir a fundação do sistema criando a classe `ItemGamerEntity`. Ela serve como um "molde" para representar os dados de um item em nosso código PHP, garantindo que a aplicação manipule os dados de forma segura e estruturada.
 
-Fase 3: A Camada de Consulta (DAO)
-Objetivo da Fase
-Aqui construímos a camada de acesso a dados para leitura. Criamos a classe ConsultaItensGamer, que centraliza toda a comunicação com o banco para realizar SELECTs, e a PesquisaItensGamerEntity para carregar os filtros de busca. Adotamos o padrão de não escrever SQL bruto, mas sim usar um Query Builder.
+### Arquivos Criados
+- `app/Entities/ItensGamer/ItemGamerEntity.php`
 
-Arquivos Criados
-app/Consultas/ItensGamer/ConsultaItensGamer.php
+### Conceitos Abordados
+-   **Entidade:** Uma classe simples cuja única responsabilidade é carregar e transportar dados.
+-   **Encapsulamento:** Uso de propriedades `private` para proteger os dados.
+-   **Getters e Setters:** Métodos públicos para uma interface controlada.
+-   **Tipagem no PHP:** Uso de PHPDoc (`@var tipo|null`) para documentar os tipos.
+-   **Interface Fluente:** Retornar `$this` (`: self`) nos setters para encadear chamadas.
+-   **Padrões de Nomenclatura:** Adoção de `camelCase` e o prefixo `is` para booleanos.
+-   **Método `toArray()`:** Para converter o objeto em um array associativo.
 
-app/Entities/ItensGamer/PesquisaItensGamerEntity.php
+</details>
 
-Conceitos Abordados
-DAO (Data Access Object): Uma classe com a responsabilidade única de acessar o banco de dados.
+<details>
+<summary><strong>▶️ Fase 2: Conexão com o Banco e Listagem de Itens (Read)</strong></summary>
 
-CQS (Command Query Separation): Descobrimos que a arquitetura do sistema separa as responsabilidades: classes de Consulta apenas leem, e classes de Gravar apenas escrevem.
+### Objetivo da Fase
+Estabelecer a conexão com o banco de dados MySQL e implementar a funcionalidade de leitura (Read), exibindo todos os itens cadastrados em uma tabela na página principal.
 
-Query Builder: Uso de métodos como ->where->equalTo() e ->where->like() para construir consultas SQL de forma programática, segura e legível.
+### Arquivos Envolvidos
+-   `db.php` (ou arquivo de configuração de banco de dados)
+-   `index.php`
 
-Hidratação de Objetos: Processo de transformar um array de dados brutos vindo do banco em um objeto ItemGamerEntity estruturado.
+### Conceitos Abordados
+-   **Conexão com Banco de Dados:** Uso de PHP para se conectar a um servidor MySQL.
+-   **SQL `SELECT`:** Execução de consultas para buscar todos os registros (`SELECT * FROM itens`).
+-   **Laços de Repetição em PHP:** Uso de `while` ou `foreach` para percorrer os resultados da consulta.
+-   **HTML Dinâmico:** Geração de linhas de uma tabela (`<tr>` e `<td>`) dinamicamente com dados vindos do PHP.
 
-Fim da Fase 3
+</details>
 
-Fase 4: A Ação de Gravação
-Objetivo da Fase
-Nesta fase, implementamos a lógica para escrever no banco (INSERT e UPDATE). Seguindo o padrão CQS, criamos uma classe de ação dedicada, a GravarItemGamer, cuja única responsabilidade é pegar uma entidade preenchida e persistir os dados.
+<details>
+<summary><strong>▶️ Fase 3: Inserção de Novos Itens (Create)</strong></summary>
 
-Arquivos Criados
-app/AcaoDePagina/Sys/ItensGamer/GravarItemGamer.php
+### Objetivo da Fase
+Implementar a funcionalidade de criação (Create), permitindo que o usuário adicione novos itens ao catálogo através de um formulário HTML.
 
-Conceitos Abordados
-Classes de Ação: Classes focadas em executar uma única tarefa ou caso de uso do sistema.
+### Arquivos Envolvidos
+-   `create.php` (ou um formulário na `index.php`)
+-   Um script PHP para processar o envio do formulário.
 
-Validação de Entrada: Verificação de dados essenciais (if (empty(...))) antes de prosseguir com a gravação.
+### Conceitos Abordados
+-   **Formulários HTML:** Criação de formulários com o método `POST`.
+-   **Variáveis Superglobais:** Captura de dados enviados pelo formulário usando `$_POST` no PHP.
+-   **SQL `INSERT`:** Construção e execução de uma instrução SQL para inserir um novo registro no banco de dados.
+-   **Redirecionamento:** Uso da função `header('Location: ...')` para redirecionar o usuário de volta à página principal após a inserção.
 
-Preparação de Dados: Conversão de tipos de dados do PHP para formatos que o banco de dados entende (ex: array para string com implode, bool para 1 ou 0).
+</details>
 
-Lógica de INSERT vs. UPDATE: Uso do ID da entidade para decidir se a operação é uma atualização de um registro existente ou a inserção de um novo.
+<details>
+<summary><strong>▶️ Fase 4: Edição e Atualização de Itens (Update)</strong></summary>
 
-Fim da Fase 4
+### Objetivo da Fase
+Desenvolver a funcionalidade de atualização (Update), que permite ao usuário editar as informações de um item já existente.
 
-Fase 5: O Front Controller (O Cérebro)
-Objetivo da Fase
-Esta foi a fase final para conectar todas as peças. Criamos o arquivo itens_gamer.php, o ponto de entrada que age como um "controlador de tráfego". Ele analisa a requisição do usuário e decide qual classe de ação (FormularioItemGamer ou GravarItemGamer) deve ser executada.
+### Arquivos Envolvidos
+-   `edit.php` (formulário de edição)
+-   Um script PHP para processar a atualização.
 
-Arquivos Criados
-sys/itens_gamer/itens_gamer.php
+### Conceitos Abordados
+-   **Passagem de Parâmetros via URL:** Envio do ID do item a ser editado (ex: `edit.php?id=5`).
+-   **Captura de Parâmetros GET:** Uso de `$_GET['id']` para identificar qual registro buscar.
+-   **SQL `SELECT ... WHERE`:** Busca dos dados de um item específico para preencher o formulário de edição.
+-   **SQL `UPDATE`:** Construção e execução de uma instrução para atualizar o registro no banco com os novos dados.
 
-Conceitos Abordados
-Padrão Front Controller: Ter um único script como ponto de entrada para um módulo.
+</details>
 
-Roteamento Simples: Uso de $_REQUEST['act'] e $_POST['Gravar'] para decidir qual bloco de código executar.
+<details>
+<summary><strong>▶️ Fase 5: Exclusão de Itens (Delete)</strong></summary>
 
-Injeção de Dependência na Prática: Vimos o ContainerVios em ação, buscando e montando nossas classes e suas dependências automaticamente.
+### Objetivo da Fase
+Implementar a funcionalidade final do CRUD, a exclusão (Delete), permitindo que itens sejam removidos permanentemente do banco de dados.
 
-Hidratação de Entidade a partir do $_POST: O processo de pegar os dados crus do formulário e preencher nosso objeto ItemGamerEntity usando os setters.
+### Arquivos Envolvidos
+-   `delete.php` (ou um link com parâmetro na `index.php`)
 
-Depuração Avançada: Aprendemos a usar var_dump() e blocos try...catch para diagnosticar erros "silenciosos" e problemas de namespace.
+### Conceitos Abordados
+-   **Confirmação de Ação:** (Idealmente) uso de JavaScript para pedir confirmação ao usuário antes de excluir.
+-   **SQL `DELETE`:** Execução de uma instrução `DELETE FROM ... WHERE id = ?` para remover o registro específico.
+-   **Segurança:** Importância de garantir que apenas o item correto seja excluído, validando o ID recebido.
 
-Fim da Fase 5
+</details>
+
+<details>
+<summary><strong>▶️ Fase 6: Documentação e Finalização</strong></summary>
+
+### Objetivo da Fase
+Consolidar a documentação do projeto, criando um arquivo `README.md` detalhado que explica o propósito, as funcionalidades e a jornada de desenvolvimento do projeto.
+
+### Arquivos Envolvidos
+-   `README.md`
+
+### Conceitos Abordados
+-   **Markdown:** Utilização da linguagem de marcação para formatar textos, listas, links e blocos de código.
+-   **Documentação de Software:** A importância de explicar o projeto para futuros desenvolvedores (incluindo você mesmo) e para quem visita o repositório.
+-   **Versionamento de Documentação:** Commitar o `README.md` como parte essencial do código do projeto.
+
+</details>
