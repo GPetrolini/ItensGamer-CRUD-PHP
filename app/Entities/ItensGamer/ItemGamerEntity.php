@@ -6,8 +6,6 @@ namespace Vios\Juridico\App\Entities\ItensGamer;
 
 final class ItemGamerEntity
 {
-
-    // o construtor garante que o objeto sempre seja criado em um estado conhecido
     /**
      * @var null
      */
@@ -55,9 +53,8 @@ final class ItemGamerEntity
         $this->nome = null;
         $this->descricao = null;
         $this->tipo = null;
-        $this->tags = []; // tags sempre começa com array vzio
+        $this->tags = [];
         $this->cor_emblema = null;
-        //$this->cor_etiqueta = null;
         $this->quantidade = null;
         $this->preco_venda = null;
         $this->item_ativo = null;
@@ -68,7 +65,7 @@ final class ItemGamerEntity
     {
         return $this->id;
     }
-    public function setId(?int $id):self // 'self' quer dizer que retorna o próprio objeto
+    public function setId(?int $id):self
     {
         $this->id = $id;
         return $this;
@@ -102,7 +99,7 @@ final class ItemGamerEntity
     }
 
     /**
-     * @return array
+     * @return TagEntity[]
      */
     public function getTags(): array
     {
@@ -164,12 +161,13 @@ final class ItemGamerEntity
         $callable = function (TagEntity $entity) {
             return $entity->getId();
         };
+
         return [
             'id' => $this->getId(),
             'nome' => $this->getNome(),
             'descricao' => $this->getDescricao(),
             'tipo' => $this->getTipo(),
-            'tags' => $this->getTags(),
+            'tags' => array_map($callable, $this->getTags()),
             'cor_emblema' => $this->getCorEmblema(),
             'quantidade' => $this->getQuantidade(),
             'preco_venda' => $this->getPrecoVenda(),

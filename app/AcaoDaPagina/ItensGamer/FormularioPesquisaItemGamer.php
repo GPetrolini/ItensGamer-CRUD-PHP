@@ -19,6 +19,9 @@ final class FormularioPesquisaItensGamer
            ->busca(
                $pesquisa->getNome() ?? ''
            )
+            ->buscaId(
+                $pesquisa->getId() ?? 0
+            )
 
             ->comboArrayMultiplo(
                 ItensGamerCamposConstants::TIPO_OPCOES,

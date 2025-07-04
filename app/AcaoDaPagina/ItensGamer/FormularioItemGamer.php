@@ -52,7 +52,7 @@ final class FormularioItemGamer extends Formulario
                 $campo->adicionaDados(['disabled' => true]);
             }
         }
-        $this->removeHtmlArea();
+
         $this->addOpcoes(['submit' => 'N']);
         return $this;
     }
@@ -108,7 +108,7 @@ final class FormularioItemGamer extends Formulario
                 ItensGamerCamposConstants::TIPO_OPCOES
             ))->required(),
             (new CampoComboArr(
-                ItensGamerCamposConstants::TAGS_NAME . 'tags[]',
+                ItensGamerCamposConstants::TAGS_NAME,
                 ItensGamerCamposConstants::TAGS_LABEL,
                 $tagsDoItemIds,
                 $tagsDisponiveis

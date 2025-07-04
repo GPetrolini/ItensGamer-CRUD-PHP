@@ -55,7 +55,13 @@ final class ListaItensGamer
         $opcoes = [];
         $opcoes = OpcoesGeraTabela::addTitulo($opcoes, 'Itens Gamers Cadastrados');
         $opcoes = OpcoesGeraTabela::addBotaoInserir($opcoes, self::CAMINHO_PAGINA);
-        $opcoes = OpcoesGeraTabela::addLink($opcoes, 'view', ['id'], self::CAMINHO_PAGINA, 'Visualizar');
+        $opcoes = OpcoesGeraTabela::addLink(
+            $opcoes,
+            'vis',
+            ['id', 'act' => 'view'],
+            self::CAMINHO_PAGINA,
+            'Visualizar'
+        );
         $opcoes = OpcoesGeraTabela::addLink(
             $opcoes,
             'history',

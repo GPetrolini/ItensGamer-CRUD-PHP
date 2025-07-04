@@ -1,108 +1,96 @@
 <?php
-
 declare(strict_types=1);
 
+namespace Vios\Juridico\App\Servicos\Historicos\ItensGamer;
 
-use Vios\Juridico\App\AcaoDePagina\Sys\ItensGamer\DeletaItensGamer;
-use Vios\Juridico\App\AcaoDePagina\Sys\ItensGamer\FormularioItemGamer;
-use Vios\Juridico\App\AcaoDePagina\Sys\ItensGamer\FormularioPesquisaItensGamer;
-use Vios\Juridico\App\AcaoDePagina\Sys\ItensGamer\GravarItemGamer;
-use Vios\Juridico\App\AcaoDePagina\Sys\ItensGamer\ListaItensGamer;
-use Vios\Juridico\App\Consultas\ItensGamer\ConsultaItensGamer;
 use Vios\Juridico\App\DAO\DAO;
-use Vios\Juridico\App\Entities\ItensGamer\ItemGamerEntity;
-use Vios\Juridico\App\Entities\ItensGamer\PesquisaItensGamerEntity;
-use Vios\Juridico\App\Entities\ItensGamer\TagEntity;
-use Vios\Juridico\App\Servicos\Historicos\HistoricoCampos\HistoricoCamposFactory as CamposFactory;
-use Vios\Juridico\App\Servicos\Historicos\ItensGamer\ItemGamerHistorico;
+use Vios\Juridico\App\Excecoes\IdNaoInformadoException;
+use Vios\Juridico\App\Servicos\Historicos\HistoricoCampos\HistoricoCampos;
+use Vios\Juridico\App\Servicos\Historicos\HistoricoCampos\HistoricoCamposEntidadeRelacionalUtil;
+use Vios\Juridico\App\Servicos\Historicos\HistoricoResolver;
+use Vios\Juridico\App\Servicos\Historicos\HistoricoVO;
+use Vios\Juridico\App\Servicos\Historicos\HistoricoEntidadesRelacionais;
 use Vios\Juridico\App\Servicos\Historicos\ListaHistorico;
-use Vios\Juridico\App\Util\Integer;
-use Vios\Juridico\ContainerVios;
+use Vios\Juridico\App\Servicos\Historicos\HistoricoCampos\HistoricoCamposFactory as CamposFactory;
 
-// define a ação
+final class ItemGamerHistorico extends HistoricoResolver
+{
+    private $listaHistorico;
+    private const TABELA_HISTORICO = 'itens_gamer_historico';
+    private const FK_TABELA_HISTORICO = 'item_gamer_id';
+    private $camposFactory;
 
-$act = $_REQUEST['act'] ?? '';
-if (($_POST['Gravar'] ?? '') === 'Gravar') {
-    $form = $_POST['form'] ?? []; // pega os dados do formulário
-    /** @var GravarItemGamer $gravador */
-    $gravador = ContainerVios::fetch(GravarItemGamer::class);
-    $tagIds = $form['tags'] ?? [];
-    if (!is_array($tagIds)) {
-        $tagIds = [];
+    public function __construct(DAO $dao, ListaHistorico $listaHistorico, CamposFactory $camposFactory)
+    {
+        $this->listaHistorico = $listaHistorico;
+        $this->camposFactory = $camposFactory;
+        $entidadeRelacionais = new HistoricoEntidadesRelacionais($dao);
+        parent::__construct($dao, $entidadeRelacionais, ...$this->getCampos());
     }
-    $tagEntities = array_map(function ($tagId) {
-        return(new TagEntity())->setId((int)$tagId);
-    }, $tagIds);
-    $precoVendaStr = $form['preco_venda'] ?? '0,00';
-    $precoFormatado = str_replace(',', '.', $precoVendaStr);
-    $precoFormatado = str_replace('.', '.', $precoFormatado);
-    $precoFinal = (float)$precoFormatado;
 
-    $item = (new ItemGamerEntity())
-        ->setId(Integer::int($form['id'] ?? 0))
-        ->setNome((string)$form['nome'] ?? '')
-        ->setDescricao((string)$form['descricao'] ?? '')
-        ->setTipo((string)$form['tipo'] ?? '')
-        ->setTags(...$tagEntities)
-        ->setCorEmblema((string)$form['cor_emblema'] ?? '#00000')
-        ->setQuantidade(Integer::int($form['quantidade'] ?? 0))
-        ->setPrecoVenda((float)$form['preco_venda'] ?? 0.0)
-        ->setItemAtivo(($form['item_ativo'] ?? 0) === '1');
+    public function listaHistorico(int $itemGamerId): string
+    {
+        return $this->listaHistorico->render(self::TABELA_HISTORICO, self::FK_TABELA_HISTORICO, $itemGamerId);
+    }
 
-    $gravador->executa($item)->toastRedirect();
-} elseif ($act === 'insert' || $act === 'edit') {
-    $consulta = ContainerVios::fetch(ConsultaItensGamer::class);
-    $itemGamerId = Integer::int($_REQUEST['id'] ?? 0);
-    $formulario = new FormularioItemGamer($consulta, $itemGamerId);
-    echo $formulario;
-} elseif ($act === 'view') {
-    $consulta = ContainerVios::fetch(ConsultaItensGamer::class);
-    $itemGamerId = Integer::int($_REQUEST['id'] ?? 0);
-    $formulario = new FormularioItemGamer($consulta, $itemGamerId);
-    $formulario->desabilitarEdicao();
-    echo $formulario;
-} elseif ($act === 'del') {
-    /** @var DeletaItensGamer $deletador */
-    $deletador = ContainerVios::fetch(DeletaItensGamer::class);
+    /**
+     * @throws IdNaoInformadoException
+     */
+    public function registroHistoricoCriacao(int $id): void
+    {
+        if ($id <= 0) {
+            return;
+        }
+        $instancia = $this->instanciaHistoricoVO($id);
+        $instancia->addTexto('Registro do item criado no sistema');
+        parent::persisteHistorico($instancia);
+    }
 
-    $itemId = Integer::int($_REQUEST['id'] ?? 0);
-    $deletador->executa($itemId)->toastRedirect();
-} elseif ($act === 'history') {
-    /** @var ItemGamerHistorico $historicoService */
-    $dao = ContainerVios::fetch(DAO::class);
-    $listaHistorico = ContainerVios::fetch(ListaHistorico::class);
-    $camposFactory = ContainerVios::fetch(CamposFactory::class);
-    $historicoService = ContainerVios::fetch(ItemGamerHistorico::class);
-    $itemId = Integer::int($_REQUEST['id'] ?? 0);
-    echo $historicoService->listaHistorico($itemId);
-} elseif ($act === 'visualizar_dois') {
-    $itemId = Integer::int($_REQUEST['id'] ?? 0);
-    $consulta = ContainerVios::fetch(ConsultaItensGamer::class);
-    $item = $consulta->getById($itemId);
-} else {
-    $pesquisaDados = $_REQUEST['pesq'] ?? [];
-    $busca = $pesquisaDados['busca'] ?? null;
-    $ativo = $pesquisaDados['comboarr'] ?? 'todos';
-    $tipoSelecionado = $pesquisaDados['comboarr_multi'] ?? [];
-    $tags = $pesquisaDados['comboarr_tag'] ?? [];
-    $cor = $pesquisaDados['cor_emblema'] ?? null;
-    $precoMin = (float)($pesquisaDados['valor_minimo'] ?? 0.0);
-    $precoMax = (float)($pesquisaDados['valor_maximo'] ?? 0.0);
+    /**
+     * @throws IdNaoInformadoException
+     */
+    protected function instanciaHistoricoVO(int $id): HistoricoVO
+    {
+        return new  HistoricoVO($id, self::FK_TABELA_HISTORICO, self::TABELA_HISTORICO);
+    }
+    protected function tabelaPersistenciaHistorico(): string
+    {
+        return self::TABELA_HISTORICO;
+    }
 
-    $pesquisaEntity = (new PesquisaItensGamerEntity())
-        ->setNome($busca)
-        ->setTags($tags)
-        ->setCorEmblema($cor)
-        ->setPrecoMinimo($precoMin > 0 ? $precoMin : null)
-        ->setPrecoMaximo($precoMax > 0 ? $precoMax : null)
-        ->setItemAtivo($ativo === 'todos' ? null : ($ativo === '1'))
-        ->setTipo($tipoSelecionado);
+    protected function chavesIgnoradas(): array
+    {
 
-    $formularioPesquisa = new FormularioPesquisaItensGamer();
-    echo $formularioPesquisa->render($pesquisaEntity);
-    echo '<hr>';
+        return ['id', 'data_cadastro'];
+    }
 
-    $consulta = ContainerVios::fetch(ConsultaItensGamer::class);
-    $lista = new ListaItensGamer($consulta);
-    echo $lista->render($pesquisaEntity);
+    /**
+     * Define quais campos do nosso ItemGamer queremos que o histórico observe.
+     * @return HistoricoCampos[]
+     */
+    protected function getCampos(): array
+    {
+        $comparacaoDireta = $this->camposFactory->instanciaHistoricoCamposComparacaoDireta();
+        $comparacaoDireta->registraCampo('nome', 'Nome do Item');
+        $comparacaoDireta->registraCampo('descricao', 'Descrição');
+        $comparacaoDireta->registraCampo('tipo', 'Tipo');
+        $comparacaoDireta->registraCampo('cor_emblema', 'Cor');
+        $comparacaoDireta->registraCampo('quantidade', 'Quantidade');
+        $comparacaoDireta->registraCampo('preco_venda', 'Preço de Venda');
+
+
+        $booleanos = $this->camposFactory->instanciaHistoricoCamposBooleanos();
+        $booleanos->registraCampo('item_ativo', 'Ativo');
+
+        $comparacaoMultipla = $this->camposFactory->instanciaHistoricoCamposEntidadesRelacionamentoMultiplo();
+        $comparacaoMultipla->registraCampo(
+            'tags',
+            HistoricoCamposEntidadeRelacionalUtil::instanciaEntidadeRelacionalTag('Tags')
+        );
+        return [
+            $comparacaoDireta,
+            $booleanos,
+            $comparacaoMultipla
+        ];
+    }
 }

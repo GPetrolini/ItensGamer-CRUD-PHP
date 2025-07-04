@@ -11,8 +11,6 @@ use Vios\Juridico\App\Constants\Campos\ItensGamer\ItensGamerCamposConstants;
 use Vios\Juridico\App\Entities\ItensGamer\ItemGamerEntity;
 use Vios\Juridico\App\Entities\ItensGamer\TagEntity;
 use Vios\Juridico\App\Util\Integer;
-
-
 final class ConsultaItensGamer
 {
     public const TABELA = 'itens_gamer';
@@ -45,7 +43,6 @@ final class ConsultaItensGamer
                 ->setTipo((string)$ItensGamer[ItensGamerCamposConstants::TIPO] ?? '')
                 ->setTags(... $this->getTagsDoItem($id))
                 ->setCorEmblema((string)$ItensGamer[ItensGamerCamposConstants::COR_EMBLEMA] ?? '')
-                //->setCorEtiqueta((string)$ItensGamer[ItensGamerCamposConstants::TIPO_COR_ETIQUETA] ?? '')
                 ->setQuantidade((integer)$ItensGamer[ItensGamerCamposConstants::QUANTIDADE] ?? 0)
                 ->setPrecoVenda((float)$ItensGamer[ItensGamerCamposConstants::PRECO_VENDA] ?? 0.0)
                 ->setItemAtivo((bool)$ItensGamer[ItensGamerCamposConstants::ITEM_ATIVO] ?? false)
@@ -159,7 +156,6 @@ final class ConsultaItensGamer
                 $pesquisa->getPrecoMaximo()
             );
         }
-
         return $this->dao->executaSelect($select);
     }
 }
