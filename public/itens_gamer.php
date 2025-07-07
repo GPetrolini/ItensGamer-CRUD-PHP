@@ -25,7 +25,7 @@ if (($_POST['Gravar'] ?? '') === 'Gravar') {
     $form = $_POST['form'] ?? [];
     /** @var GravarItemGamer $gravador */
     $gravador = ContainerVios::fetch(GravarItemGamer::class);
-    $tagIds = $form['tags'] ?? [];
+    $tagIds = $form[ItensGamerCamposConstants::TAGS] ?? [];
     if (!is_array($tagIds)) {
         $tagIds = [];
     }
@@ -40,7 +40,7 @@ if (($_POST['Gravar'] ?? '') === 'Gravar') {
     $item = (new ItemGamerEntity())
         ->setId(Integer::int($form[ItensGamerCamposConstants::ID] ?? 0))
         ->setNome((string)$form[ItensGamerCamposConstants::NOME] ?? '')
-        ->setDescricao((string)$form['desabilitarEdicaodescricao'] ?? '')
+        ->setDescricao((string)$form[ItensGamerCamposConstants::DESCRICAO] ?? '')
         ->setTipo((string)$form[ItensGamerCamposConstants::TIPO] ?? '')
         ->setTags(...$tagEntities)
         ->setCorEmblema((string)$form[ItensGamerCamposConstants::COR_EMBLEMA] ?? '#00000')
@@ -61,6 +61,7 @@ if (($_POST['Gravar'] ?? '') === 'Gravar') {
     $itemGamerId = Integer::int($_REQUEST[ItensGamerCamposConstants::ID] ?? 0);
     /** @var FormularioItemGamer $formulario */
     $formulario = ContainerVios::BuildWithoutArg(FormularioItemGamer::class, ['itemGamerId' => $itemGamerId]);
+    $formulario->desabilitarEdicao();
     echo $formulario->__toString();
 
 } elseif ($act === 'del') {
@@ -77,11 +78,6 @@ if (($_POST['Gravar'] ?? '') === 'Gravar') {
     $historicoService = ContainerVios::fetch(ItemGamerHistorico::class);
     $itemGamerId = Integer::int($_REQUEST[ItensGamerCamposConstants::ID] ?? 0);
     echo $historicoService->listaHistorico($itemGamerId);
-
-} elseif ($act === 'visualizar_dois') {
-    $itemGamerId = Integer::int($_REQUEST[ItensGamerCamposConstants::ID] ?? 0);
-    $consulta = ContainerVios::fetch(ConsultaItensGamer::class);
-    $item = $consulta->getById($itemGamerId);
 
 } else {
     $pesquisaDados = $_REQUEST['pesq'] ?? [];

@@ -46,7 +46,6 @@ final class ListaItensGamer
             ItensGamerCamposConstants::QUANTIDADE => ItensGamerCamposConstants::QUANTIDADE_LABEL ,
             'preco_formatado' => ItensGamerCamposConstants::PRECO_VENDA_LABEL,
             'ativo_formatado' => ItensGamerCamposConstants::ITEM_ATIVO_LABEL,
-            'visualizar_dois_botao' => 'Visualizar Dois'
         ];
     }
 
@@ -72,6 +71,14 @@ final class ListaItensGamer
         );
         $opcoes = OpcoesGeraTabela::addLink($opcoes, 'edit', [ItensGamerCamposConstants::ID], self::CAMINHO_PAGINA);
         $opcoes = OpcoesGeraTabela::addLink($opcoes, 'del', [ItensGamerCamposConstants::ID], self::CAMINHO_PAGINA);
+        $opcoes = OpcoesGeraTabela::addLink(
+            $opcoes,
+            'vis',
+            [ItensGamerCamposConstants::ID, 'act' => 'view'],
+            self::CAMINHO_PAGINA,
+            'Visualizar diferente',
+            ['btnClass' => 'btn-warning']
+        );
         return $opcoes;
     }
 
@@ -90,14 +97,7 @@ final class ListaItensGamer
             $tagNomes = array_map(function (TagEntity $tag) {
                 return $tag->getNome();
             }, $tagEntities);
-            $urlVisualizardois = '';
-            if ($entity->isItemAtivo()) {
-                $urlVisualizardois = '?' . http_build_query([
-                        'pag' => self::CAMINHO_PAGINA,
-                        'act' => 'visualizar_dois',
-                        ItensGamerCamposConstants::ID => $entity->getId()
-                    ]);
-            }
+
 
             $cor = htmlspecialchars($entity->getCorEmblema() ?? '#ccc');
 
@@ -116,8 +116,6 @@ final class ListaItensGamer
                     "Cor:{$cor}"
                 ))->__toString(),
                 'ativo_formatado' => $entity->isItemAtivo() ? 'Sim' : 'Não',
-                'visualizar_dois_botao' => '<a href="' . $urlVisualizardois .
-                    '" class="btn btn-warning btn-sm">Visualizar dois</a>',
             ];
         };
         return array_map($callable, $itensDoBanco);

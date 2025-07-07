@@ -35,10 +35,8 @@ final class FormularioItemGamer extends Formulario
      */
     public function __construct(ConsultaItensGamer $consulta, int $itemGamerId)
     {
-        // Guarda o dao para usar depos
         $this->consulta = $consulta;
         $this->listaDeCampos = $this->campos($itemGamerId);
-        // chama o construtor da classe "mae" (Formulário)
         parent::__construct('Cadastro de Item Gamer', $this->listaDeCampos);
     }
 
@@ -87,12 +85,12 @@ final class FormularioItemGamer extends Formulario
                 $entidade->getId() ?? 0
             ),
             (new CampoTextoUmaLinha(
-                ItensGamerCamposConstants::NOME_NAME,         // atributo 'name' do HTMl
-                ItensGamerCamposConstants::NOME_LABEL,        // o 'label' que o usuário ve
-                $entidade->getNome() ?? ''                   // o valor inicial pego pela entidade
+                ItensGamerCamposConstants::NOME_NAME,
+                ItensGamerCamposConstants::NOME_LABEL,
+                $entidade->getNome() ?? ''
             ))
-                ->required()                                      // metodo fluente para dizer que o campo é obrigatório
-                -> help('Digite o nome principal do produto')    // Adiciona um texto de ajuda
+                ->required()
+                -> help('Digite o nome principal do produto')
             ,
             (new CampoTextArea(
                 ItensGamerCamposConstants::DESCRICAO_NAME,
