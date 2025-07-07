@@ -58,20 +58,20 @@ final class ListaItensGamer
         $opcoes = OpcoesGeraTabela::addLink(
             $opcoes,
             'vis',
-            ['id', 'act' => 'view'],
+            [ItensGamerCamposConstants::ID, 'act' => 'view'],
             self::CAMINHO_PAGINA,
             'Visualizar'
         );
         $opcoes = OpcoesGeraTabela::addLink(
             $opcoes,
             'history',
-            ['id'],
+            [ItensGamerCamposConstants::ID],
             self::CAMINHO_PAGINA,
             'Visualizar histórico',
             ['act' => 'history']
         );
-        $opcoes = OpcoesGeraTabela::addLink($opcoes, 'edit', ['id'], self::CAMINHO_PAGINA);
-        $opcoes = OpcoesGeraTabela::addLink($opcoes, 'del', ['id'], self::CAMINHO_PAGINA);
+        $opcoes = OpcoesGeraTabela::addLink($opcoes, 'edit', [ItensGamerCamposConstants::ID], self::CAMINHO_PAGINA);
+        $opcoes = OpcoesGeraTabela::addLink($opcoes, 'del', [ItensGamerCamposConstants::ID], self::CAMINHO_PAGINA);
         return $opcoes;
     }
 
@@ -95,17 +95,17 @@ final class ListaItensGamer
                 $urlVisualizardois = '?' . http_build_query([
                         'pag' => self::CAMINHO_PAGINA,
                         'act' => 'visualizar_dois',
-                        'id' => $entity->getId()
+                        ItensGamerCamposConstants::ID => $entity->getId()
                     ]);
             }
 
             $cor = htmlspecialchars($entity->getCorEmblema() ?? '#ccc');
 
             return [
-                'id' => $entity->getId(),
-                'nome' => $entity->getNome(),
-                'tipo' => $entity->getTipo(),
-                'quantidade' => $entity->getQuantidade(),
+                ItensGamerCamposConstants::ID => $entity->getId(),
+                ItensGamerCamposConstants::NOME => $entity->getNome(),
+                ItensGamerCamposConstants::TIPO => $entity->getTipo(),
+                ItensGamerCamposConstants::QUANTIDADE => $entity->getQuantidade(),
                 'descricao_curta' => mb_substr($entity->getDescricao() ?? '', 0, 40) . '...',
                 'tags_formatadas' => implode(', ', $tagNomes),
                 'preco_formatado' => 'R$' . number_format($entity->getPrecoVenda() ?? 0, 2, ',', '.'),

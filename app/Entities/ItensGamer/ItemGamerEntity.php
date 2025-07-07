@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Vios\Juridico\App\Entities\ItensGamer;
 
+use Vios\Juridico\App\Constants\Campos\ItensGamer\ItensGamerCamposConstants;
+
 final class ItemGamerEntity
 {
     /**
@@ -163,16 +165,16 @@ final class ItemGamerEntity
         };
 
         return [
-            'id' => $this->getId(),
-            'nome' => $this->getNome(),
-            'descricao' => $this->getDescricao(),
-            'tipo' => $this->getTipo(),
-            'tags' => array_map($callable, $this->getTags()),
-            'cor_emblema' => $this->getCorEmblema(),
-            'quantidade' => $this->getQuantidade(),
-            'preco_venda' => $this->getPrecoVenda(),
-            'item_ativo' => $this->isItemAtivo(),
-            'data_cadastro' => $this->getDataCadastro() ? $this->getDataCadastro()->format('d/m/Y') : null,
+            ItensGamerCamposConstants::ID => $this->getId(),
+            ItensGamerCamposConstants::NOME => $this->getNome(),
+            ItensGamerCamposConstants::DESCRICAO => $this->getDescricao(),
+            ItensGamerCamposConstants::TIPO => $this->getTipo(),
+            ItensGamerCamposConstants::TAGS => array_map($callable, $this->getTags()),
+            ItensGamerCamposConstants::COR_EMBLEMA => $this->getCorEmblema(),
+            ItensGamerCamposConstants::QUANTIDADE => $this->getQuantidade(),
+            ItensGamerCamposConstants::PRECO_VENDA => $this->getPrecoVenda(),
+            ItensGamerCamposConstants::ITEM_ATIVO => $this->isItemAtivo(),
+            ItensGamerCamposConstants::DATA_CADASTRO => $this->getDataCadastro() ? $this->getDataCadastro()->format('d/m/Y') : null,
         ];
     }
 }

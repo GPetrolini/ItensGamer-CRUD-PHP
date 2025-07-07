@@ -3,15 +3,16 @@ declare(strict_types=1);
 
 namespace Vios\Juridico\App\Servicos\Historicos\ItensGamer;
 
+use Vios\Juridico\App\Constants\Campos\ItensGamer\ItensGamerCamposConstants;
 use Vios\Juridico\App\DAO\DAO;
 use Vios\Juridico\App\Excecoes\IdNaoInformadoException;
 use Vios\Juridico\App\Servicos\Historicos\HistoricoCampos\HistoricoCampos;
+use Vios\Juridico\App\Servicos\Historicos\HistoricoCampos\HistoricoCamposEntidadeRelacionalUtil;
 use Vios\Juridico\App\Servicos\Historicos\HistoricoResolver;
 use Vios\Juridico\App\Servicos\Historicos\HistoricoVO;
 use Vios\Juridico\App\Servicos\Historicos\HistoricoEntidadesRelacionais;
 use Vios\Juridico\App\Servicos\Historicos\ListaHistorico;
 use Vios\Juridico\App\Servicos\Historicos\HistoricoCampos\HistoricoCamposFactory as CamposFactory;
-
 
 final class ItemGamerHistorico extends HistoricoResolver
 {
@@ -61,7 +62,7 @@ final class ItemGamerHistorico extends HistoricoResolver
     protected function chavesIgnoradas(): array
     {
 
-        return ['id', 'data_cadastro'];
+        return [ItensGamerCamposConstants::ID, ItensGamerCamposConstants::DATA_CADASTRO];
     }
 
     /**
@@ -71,22 +72,47 @@ final class ItemGamerHistorico extends HistoricoResolver
     protected function getCampos(): array
     {
         $comparacaoDireta = $this->camposFactory->instanciaHistoricoCamposComparacaoDireta();
-        $comparacaoDireta->registraCampo('nome', 'Nome do Item');
-        $comparacaoDireta->registraCampo('descricao', 'Descrição');
-        $comparacaoDireta->registraCampo('tipo', 'Tipo');
-        $comparacaoDireta->registraCampo('tags', 'Tags');
-        $comparacaoDireta->registraCampo('cor_emblema', 'Cor');
-        $comparacaoDireta->registraCampo('quantidade', 'Quantidade'); // Adicionei quantidade e preco_venda
-        $comparacaoDireta->registraCampo('preco_venda', 'Preço de Venda');
+        $comparacaoDireta->registraCampo(
+            ItensGamerCamposConstants::NOME,
+            ItensGamerCamposConstants::NOME_LABEL
+        );
+        $comparacaoDireta->registraCampo(
+            ItensGamerCamposConstants::DESCRICAO,
+            ItensGamerCamposConstants::DESCRICAO_LABEL
+        );
+        $comparacaoDireta->registraCampo(
+            ItensGamerCamposConstants::TIPO,
+            ItensGamerCamposConstants::TIPO_LABEL
+        );
+        $comparacaoDireta->registraCampo(
+            ItensGamerCamposConstants::COR_EMBLEMA,
+            ItensGamerCamposConstants::COR_EMBLEMA_LABEL
+        );
+        $comparacaoDireta->registraCampo(
+            ItensGamerCamposConstants::QUANTIDADE,
+            ItensGamerCamposConstants::QUANTIDADE_LABEL
+        );
+        $comparacaoDireta->registraCampo(
+            ItensGamerCamposConstants::PRECO_VENDA,
+            ItensGamerCamposConstants::PRECO_VENDA_LABEL
+        );
 
 
         $booleanos = $this->camposFactory->instanciaHistoricoCamposBooleanos();
-        $booleanos->registraCampo('item_ativo', 'Ativo');
+        $booleanos->registraCampo(
+            ItensGamerCamposConstants::ITEM_ATIVO,
+            ItensGamerCamposConstants::ITEM_ATIVO_LABEL
+        );
+
+        $comparacaoMultipla = $this->camposFactory->instanciaHistoricoCamposEntidadesRelacionamentoMultiplo();
+        $comparacaoMultipla->registraCampo(
+            ItensGamerCamposConstants::TAGS,
+            HistoricoCamposEntidadeRelacionalUtil::instanciaEntidadeRelacionalTag(ItensGamerCamposConstants::TAGS_LABEL)
+        );
         return [
             $comparacaoDireta,
             $booleanos,
-
-
+            $comparacaoMultipla
         ];
     }
 }

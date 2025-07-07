@@ -32,11 +32,11 @@ final class FormularioPesquisaItensGamer
                 ['todos' => 'Todos', 'Não', 'Sim'],
                 ItensGamerCamposConstants::ITEM_ATIVO_LABEL,
                 is_null($pesquisa->isItemAtivo()) ? 'todos' : ($pesquisa->isItemAtivo() ? '1' : '0'),
-                'item_ativo'
+                ItensGamerCamposConstants::ITEM_ATIVO
             )
             ->campoTextGenerico(
                 ItensGamerCamposConstants::COR_EMBLEMA_LABEL,
-                'cor_emblema',
+                ItensGamerCamposConstants::COR_EMBLEMA,
                 $pesquisa->getCorEmblema() ?? ''
             )
             ->faixaValor(

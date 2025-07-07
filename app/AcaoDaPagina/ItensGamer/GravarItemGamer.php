@@ -65,7 +65,11 @@ final class GravarItemGamer
             }
 
             if ($itemId > 0) {
-                $this->dao->atualiza(ItensGamerCamposConstants::TABELA, $dados, ['id' => $itemId]);
+                $this->dao->atualiza(
+                    ItensGamerCamposConstants::TABELA,
+                    $dados,
+                    [ItensGamerCamposConstants::ID => $itemId]
+                );
             } else {
                 $itemId = $this->dao->insere($dados, ItensGamerCamposConstants::TABELA, true);
                 $this->historico->registroHistoricoCriacao($itemId);

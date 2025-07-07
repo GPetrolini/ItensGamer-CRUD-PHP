@@ -11,6 +11,7 @@ use Vios\Juridico\App\Constants\Campos\ItensGamer\ItensGamerCamposConstants;
 use Vios\Juridico\App\Entities\ItensGamer\ItemGamerEntity;
 use Vios\Juridico\App\Entities\ItensGamer\TagEntity;
 use Vios\Juridico\App\Util\Integer;
+
 final class ConsultaItensGamer
 {
     public const TABELA = 'itens_gamer';
@@ -58,8 +59,6 @@ final class ConsultaItensGamer
     {
         $pesquisa = new  PesquisaItensGamerEntity();
         $pesquisa->setId($ItensGamerId);
-        // se o ID for 0, o resultado será um array vazio
-        // se for > 0, chama o getItensGamer com o filtro de pesquisa
         $resultado = $ItensGamerId <= 0 ? [] : $this->getItensGamer($pesquisa);
         $entidade = $resultado[0] ?? null;
 
@@ -76,7 +75,8 @@ final class ConsultaItensGamer
         }
         $select = $this->dao->getSelectBase('item_gamer_tags', 'igt')
             ->columns([])
-            ->join(['t' => 'tags'], 'igt.tag_id = t.id', ['id', 'nome'])
+            ->join(['t' => 'tags'], 'igt.tag_id = t.id', [ItensGamerCamposConstants::ID,
+                ItensGamerCamposConstants::NOME])
             ->where(['igt.item_gamer_id' => $itensGamerId])
             ->order('t.nome ASC');
 
@@ -84,8 +84,8 @@ final class ConsultaItensGamer
 
         return array_map(function (array $tag) {
             return (new TagEntity())
-                ->setId((int)$tag['id'])
-                ->setNome((string)$tag['nome']);
+                ->setId((int)$tag[ItensGamerCamposConstants::ID])
+                ->setNome((string)$tag[ItensGamerCamposConstants::NOME]);
         }, $resultado);
     }
 
@@ -95,7 +95,7 @@ final class ConsultaItensGamer
     public function getTagsDisponiveis(): array
     {
         $select = $this->dao->getSelectBase('tags', 't')
-            ->columns(['id','nome'])
+            ->columns([ItensGamerCamposConstants::ID,ItensGamerCamposConstants::NOME])
             ->order('t.nome ASC');
         $resultado = $this->dao->executaSelect($select);
         return array_column($resultado, 'nome', 'id');
@@ -106,19 +106,12 @@ final class ConsultaItensGamer
      */
     public function buscaItensGamer(PesquisaItensGamerEntity $pesquisa): array
     {
-        // inicia o query builder para a tabela "itens_gamer
-
         $select = $this->dao->getSelectBase(ItensGamerCamposConstants::TABELA, 'ig');
-
-        // adiciona o filtro de ID
         if ($pesquisa->getId() > 0) {
             $select->where->equalTo('ig.' . ItensGamerCamposConstants::ID, $pesquisa->getId());
         }
-
-        // Adiciona o filtro pro nome se preenchido
         $buscaNome = trim($pesquisa->getNome() ?? '');
         if (!empty($buscaNome)) {
-            // 'Like' permite buscar por parte do nome
             $select->where->like('ig.' . ItensGamerCamposConstants::NOME, "%{$buscaNome}%");
         }
         $buscaTipo = $pesquisa->getTipo() ?? '';
