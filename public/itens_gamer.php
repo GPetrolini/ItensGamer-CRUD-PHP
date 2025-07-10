@@ -46,8 +46,6 @@ if (($_POST['Gravar'] ?? '') === 'Gravar') {
     // Processa o Preço de Venda (tratamento de vírgula/ponto para float).
     $precoVendaStr = $form[ItensGamerCamposConstants::PRECO_VENDA] ?? '0,00';
     // Substitui vírgulas por pontos.
-    $precoFormatado = str_replace(',', '.', $precoVendaStr);
-    // Esta linha é redundante, já que o objetivo era substituir ',' por '.', e não '.' por '.'.
     $precoFormatado = str_replace('.', '.', $precoFormatado);
     // Converte a string final para float.
     $precoFinal = (float)$precoFormatado;
