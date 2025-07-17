@@ -1,0 +1,3 @@
+Este diretório contém a versão refatorada do CRUD de "Itens Gamer", desenvolvida em colaboração com um desenvolvedor sênior para alinhar o código aos padrões e melhores práticas da empresa.
+
+O objetivo desta refatoração foi não apenas garantir a funcionalidade completa, mas também melhorar a estrutura, a manutenibilidade e a robustez do código, servindo como um exemplo de implementação para futuros módulos.
